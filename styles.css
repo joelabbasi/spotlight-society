@@ -646,6 +646,56 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 }
 .footer__links a:hover { color: var(--accent); }
 
+/* ─── Custom cursor (pointer devices only) ────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+
+  #cursor-dot,
+  #cursor-ring {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+    will-change: left, top;
+  }
+
+  #cursor-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+  }
+
+  #cursor-ring {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--accent);
+    background: transparent;
+    opacity: 0.5;
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  }
+
+  body.cursor-hover #cursor-ring {
+    width: 38px;
+    height: 38px;
+    opacity: 0.35;
+  }
+}
+
+/* ─── Focus states ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.contact__form input:focus-visible,
+.contact__form textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
 /* ─── Scroll-in Animations ─────────────────────────────────── */
 .reveal {
   opacity: 0;

@@ -1,3 +1,33 @@
+/* ─── Custom cursor ───────────────────────────────────────── */
+const cursorDot  = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+
+if (cursorDot && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  let cx = -100, cy = -100;
+  let rafCursor = false;
+
+  document.addEventListener('mousemove', (e) => {
+    cx = e.clientX;
+    cy = e.clientY;
+    if (!rafCursor) {
+      rafCursor = true;
+      requestAnimationFrame(() => {
+        cursorDot.style.left  = cx + 'px';
+        cursorDot.style.top   = cy + 'px';
+        cursorRing.style.left = cx + 'px';
+        cursorRing.style.top  = cy + 'px';
+        rafCursor = false;
+      });
+    }
+  });
+
+  const hoverTargets = 'a, button, .mascot, input, textarea, .work-item__thumb, .service-card';
+  document.querySelectorAll(hoverTargets).forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+}
+
 /* ─── Nav: scroll state + mobile toggle ───────────────────── */
 const nav     = document.getElementById('nav');
 const burger  = document.getElementById('burger');
