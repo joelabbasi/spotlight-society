@@ -71,6 +71,35 @@ const statsObserver = new IntersectionObserver((entries) => {
 const statsSection = document.querySelector('.stats');
 if (statsSection) statsObserver.observe(statsSection);
 
+/* ─── Mascot spotlight reveal ─────────────────────────────── */
+const mascot = document.getElementById('mascot');
+
+if (mascot && window.matchMedia('(hover: hover)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  let rafPending = false;
+  let pendingX = null;
+  let pendingY = null;
+
+  mascot.addEventListener('mousemove', (e) => {
+    const rect = mascot.getBoundingClientRect();
+    pendingX = ((e.clientX - rect.left) / rect.width  * 100).toFixed(2) + '%';
+    pendingY = ((e.clientY - rect.top)  / rect.height * 100).toFixed(2) + '%';
+
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => {
+        mascot.style.setProperty('--mouse-x', pendingX);
+        mascot.style.setProperty('--mouse-y', pendingY);
+        rafPending = false;
+      });
+    }
+  });
+
+  mascot.addEventListener('mouseleave', () => {
+    mascot.style.setProperty('--mouse-x', '50%');
+    mascot.style.setProperty('--mouse-y', '40%');
+  });
+}
+
 /* ─── Contact form (client-side only) ────────────────────── */
 const form       = document.querySelector('.contact__form');
 const formStatus = document.getElementById('formStatus');

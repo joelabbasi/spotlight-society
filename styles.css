@@ -225,21 +225,75 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   min-height: min(70vw, 420px);
 }
 
-.hero__mascot-placeholder {
+/* ─── Mascot spotlight reveal ──────────────────────────────── */
+.mascot {
+  position: relative;
   width: min(100%, 360px);
   aspect-ratio: 4 / 5;
+  --mouse-x: 50%;
+  --mouse-y: 40%;
+  --spot-r: 180px;
+}
+
+.mascot__glow {
+  position: absolute;
+  inset: 0;
   border-radius: 12px;
-  border: 1px dashed rgba(194, 255, 180, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 1rem;
+  background: radial-gradient(
+    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
+    rgba(194, 255, 180, 0.12) 0%,
+    rgba(194, 255, 180, 0.04) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
+  transition: background 0.05s linear;
+  z-index: 1;
+}
+
+.mascot__base,
+.mascot__styled {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+
+.mascot__base  { z-index: 2; }
+.mascot__styled { z-index: 3; }
+
+/* Spotlight mask — styled layer only visible inside the circle */
+.mascot__styled {
+  -webkit-mask-image: radial-gradient(
+    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
+    transparent 0%,
+    transparent 55%,
+    black 75%
+  );
+  mask-image: radial-gradient(
+    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
+    transparent 0%,
+    transparent 55%,
+    black 75%
+  );
+}
+
+/* Touch / reduced-motion fallback: show styled version statically */
+@media (hover: none) {
+  .mascot__styled {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .mascot__glow { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot__styled {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .mascot__glow { display: none; }
 }
 
 .hero__headline {
