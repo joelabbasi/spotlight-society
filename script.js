@@ -101,22 +101,41 @@ const statsObserver = new IntersectionObserver((entries) => {
 const statsSection = document.querySelector('.stats');
 if (statsSection) statsObserver.observe(statsSection);
 
-/* ─── Mascot spotlight — lerp + distance brightness ──────── */
+/* ─── Cinematic spotlight — lerp + distance + three layers ─── */
 (function () {
-  const mascotEl  = document.getElementById('mascot');
-  const heroEl    = document.querySelector('.hero');
+  const mascotEl = document.getElementById('mascot');
+  const heroEl   = document.querySelector('.hero');
+  const beamEl   = document.getElementById('heroBeam');
   if (!mascotEl || !heroEl) return;
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  if ( window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const isPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── Atmosphere particles ───────────────────────────────── */
+  const particlesEl = document.querySelector('.hero__particles');
+  if (particlesEl && !reducedMotion) {
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('span');
+      p.className = 'particle';
+      p.style.setProperty('--x',     (Math.random() * 100).toFixed(1) + '%');
+      p.style.setProperty('--delay', (Math.random() * 12).toFixed(2)  + 's');
+      p.style.setProperty('--size',  (1 + Math.random() * 2.5).toFixed(1) + 'px');
+      p.style.setProperty('--dur',   (8 + Math.random() * 8).toFixed(1)   + 's');
+      p.style.setProperty('--alpha', (0.06 + Math.random() * 0.09).toFixed(2));
+      p.style.setProperty('--drift', ((Math.random() - 0.5) * 70).toFixed(1) + 'px');
+      particlesEl.appendChild(p);
+    }
+  }
+
+  if (!isPointer || reducedMotion) return;
 
   const dimEl    = mascotEl.querySelector('.mascot__dim');
   const brightEl = mascotEl.querySelector('.mascot__bright');
-  const glowEl   = mascotEl.querySelector('.mascot__glow');
+  const hotEl    = mascotEl.querySelector('.mascot__hot');
 
   let rawX = 0, rawY = 0;
   let lerpX = 0, lerpY = 0;
-  let inHero = false;
-  let hasReset = false;
+  let inHero = false, hasReset = false;
 
   function smoothstep(lo, hi, x) {
     const t = Math.max(0, Math.min(1, (x - lo) / (hi - lo)));
@@ -126,60 +145,67 @@ if (statsSection) statsObserver.observe(statsSection);
   heroEl.addEventListener('mouseenter', (e) => {
     inHero = true;
     hasReset = false;
-    /* Seed lerp at entry position so there's no pop-in */
     rawX = lerpX = e.clientX;
     rawY = lerpY = e.clientY;
   });
-
-  heroEl.addEventListener('mousemove', (e) => {
-    rawX = e.clientX;
-    rawY = e.clientY;
-  });
-
-  heroEl.addEventListener('mouseleave', () => { inHero = false; });
+  heroEl.addEventListener('mousemove',  (e) => { rawX = e.clientX; rawY = e.clientY; });
+  heroEl.addEventListener('mouseleave', ()  => { inHero = false; });
 
   function tick() {
     if (inHero) {
-      /* Lerp toward raw cursor — trail factor 0.15 */
-      lerpX += (rawX - lerpX) * 0.15;
-      lerpY += (rawY - lerpY) * 0.15;
+      /* Smooth trail — 0.10 for a cinematic lag */
+      lerpX += (rawX - lerpX) * 0.10;
+      lerpY += (rawY - lerpY) * 0.10;
 
-      const rect = mascotEl.getBoundingClientRect();
-      const cx   = rect.left + rect.width  / 2;
-      const cy   = rect.top  + rect.height / 2;
+      const heroRect   = heroEl.getBoundingClientRect();
+      const mascotRect = mascotEl.getBoundingClientRect();
+      const cx = mascotRect.left + mascotRect.width  / 2;
+      const cy = mascotRect.top  + mascotRect.height / 2;
 
       /* Distance from lerped cursor to center-bear center */
       const dist = Math.sqrt((lerpX - cx) ** 2 + (lerpY - cy) ** 2);
 
-      /* proximity: 1 = cursor at center, 0 = cursor far away */
-      const proximity = 1 - smoothstep(180, 620, dist);
+      /* proximity: 1 = at center, 0 = far away. Full at 160px, zero at 580px */
+      const proximity = 1 - smoothstep(160, 580, dist);
 
-      /* Mascot-relative percentage (clamped 0-100) for the mask origin */
-      const pctX = Math.max(0, Math.min(100, (lerpX - rect.left) / rect.width  * 100));
-      const pctY = Math.max(0, Math.min(100, (lerpY - rect.top)  / rect.height * 100));
-
+      /* Mask origin as % within mascot (clamped 0-100) */
+      const pctX = Math.max(0, Math.min(100, (lerpX - mascotRect.left) / mascotRect.width  * 100));
+      const pctY = Math.max(0, Math.min(100, (lerpY - mascotRect.top)  / mascotRect.height * 100));
       mascotEl.style.setProperty('--mouse-x', pctX.toFixed(2) + '%');
       mascotEl.style.setProperty('--mouse-y', pctY.toFixed(2) + '%');
 
-      /* Ambient lift on dim layer: brightens slightly as cursor approaches */
+      /* Layer 1 — dim: ambient brightness lift as cursor approaches */
       if (dimEl) {
-        const bri = (0.62 + proximity * 0.28).toFixed(3);
+        const bri = (0.62 + proximity * 0.26).toFixed(3);
         const sat = (0.75 + proximity * 0.25).toFixed(3);
         dimEl.style.filter = `brightness(${bri}) saturate(${sat})`;
       }
 
-      /* Bright spotlight layer opacity — driven by proximity */
+      /* Layer 2 — broad spotlight: fades in with proximity */
       if (brightEl) brightEl.style.opacity = proximity.toFixed(3);
 
-      /* Accent glow opacity — follows proximity */
-      if (glowEl) glowEl.style.opacity = (proximity * 0.88).toFixed(3);
+      /* Layer 3 — hot spot: kicks in only when very close */
+      if (hotEl) {
+        const hot = Math.max(0, (proximity - 0.35) / 0.65);
+        hotEl.style.opacity = hot.toFixed(3);
+      }
+
+      /* Beam glow — screen blend, hero-space coordinates, scales with proximity */
+      if (beamEl) {
+        const bx = (lerpX - heroRect.left).toFixed(1);
+        const by = (lerpY - heroRect.top).toFixed(1);
+        const a1 = (proximity * 0.30).toFixed(3);
+        const a2 = (proximity * 0.08).toFixed(3);
+        beamEl.style.background =
+          `radial-gradient(circle 560px at ${bx}px ${by}px, rgba(194,255,180,${a1}) 0%, rgba(194,255,180,${a2}) 40%, transparent 100%)`;
+      }
 
     } else if (!hasReset) {
-      /* One-shot reset; CSS transitions on filter/opacity carry the fade-out */
       hasReset = true;
-      if (dimEl)    dimEl.style.filter    = '';
+      if (dimEl)    dimEl.style.filter     = '';
       if (brightEl) brightEl.style.opacity = '0';
-      if (glowEl)   glowEl.style.opacity   = '0';
+      if (hotEl)    hotEl.style.opacity    = '0';
+      if (beamEl)   beamEl.style.background = '';
     }
 
     requestAnimationFrame(tick);

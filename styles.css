@@ -123,15 +123,15 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 }
 
 .nav__logo-img {
-  height: clamp(28px, 3.5vw, 38px);
+  height: clamp(36px, 4.5vw, 52px);
   width: auto;
   display: block;
-  /* Drop shadow keeps the logo legible over dark hero backgrounds */
-  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.45));
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.5));
   transition: filter var(--transition);
 }
 
-/* When nav is solid/light, lighten the shadow so it doesn't look heavy */
 .nav.scrolled .nav__logo-img {
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
 }
@@ -201,11 +201,51 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 80% 80% at 50% 50%,
-    rgba(17, 51, 32, 0.25) 0%,
-    rgba(5, 8, 7, 0.65) 100%
-  );
+  /* Static stage beam from above + ambient vignette */
+  background:
+    radial-gradient(ellipse 500px 800px at 50% 0%, rgba(194, 255, 180, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(17, 51, 32, 0.22) 0%, rgba(5, 8, 7, 0.62) 100%);
+}
+
+/* Screen-blend spotlight beam — background driven by JS */
+.hero__beam-spot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+
+/* Atmosphere particles container */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  left: var(--x);
+  bottom: -8px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: rgba(194, 255, 180, var(--alpha, 0.08));
+  animation: particle-float var(--dur) var(--delay) infinite linear;
+  will-change: transform, opacity;
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0) translateX(0);             opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: var(--alpha, 0.08); }
+  100% { transform: translateY(-108vh) translateX(var(--drift, 0px)); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle { display: none; }
 }
 
 /* ─── Hero centered layout ─────────────────────────────────── */
@@ -265,17 +305,20 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: clamp(0.25rem, 1.5vw, 1.25rem);
-  width: 100%;
+  /* Full-bleed: break out of container's padding so bears have room */
+  width: calc(100% + 2 * clamp(1.25rem, 5vw, 3rem));
+  margin-inline: calc(-1 * clamp(1.25rem, 5vw, 3rem));
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  gap: clamp(1rem, 2.5vw, 2.5rem);
   position: relative;
 }
 
-/* Side bears — dimmed, 70% scale, nudged slightly down */
-.bear--side {
-  width: min(33.6vh, 266px);
-  height: min(33.6vh, 266px);
+/* All three bears — same size (side bears no longer scaled down) */
+.bear--side,
+.bear--center {
+  width: clamp(200px, 27vw, 380px);
+  height: clamp(200px, 27vw, 380px);
   flex-shrink: 0;
-  transform: translateY(8%);
 }
 
 .bear--side img {
@@ -289,38 +332,20 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   -webkit-user-drag: none;
 }
 
-/* Mirror the right bear so both face inward */
+/* Mirror right bear inward */
 .bear--right img { transform: scaleX(-1); }
 
-/* Center bear — spotlight hero */
+/* Center bear — spotlight anchor */
 .bear--center {
   position: relative;
-  width: min(48vh, 380px);
-  height: min(48vh, 380px);
-  flex-shrink: 0;
   --mouse-x: 50%;
   --mouse-y: 50%;
 }
 
-/* Ambient spotlight glow behind center bear */
-.mascot__glow {
-  position: absolute;
-  inset: -18%;
-  z-index: 1;
-  pointer-events: none;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle 260px at var(--mouse-x) var(--mouse-y),
-    rgba(194, 255, 180, 0.22) 0%,
-    rgba(194, 255, 180, 0.07) 55%,
-    transparent 100%
-  );
-  opacity: 0;
-  /* Opacity is driven by JS; no CSS transition here to avoid fighting lerp */
-}
-
+/* All three image layers share base styles */
 .mascot__dim,
-.mascot__bright {
+.mascot__bright,
+.mascot__hot {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -329,57 +354,70 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   user-select: none;
   pointer-events: none;
   -webkit-user-drag: none;
+  display: block;
 }
 
-/* Shadow state — always visible, dims when cursor is far */
+/* Layer 1 — always visible; dims when cursor is far */
 .mascot__dim {
   z-index: 2;
   filter: brightness(0.62) saturate(0.75);
   transition: filter 0.4s ease-out;
 }
 
-/* Spotlight layer — masked to cursor circle, fades in as cursor approaches */
+/* Layer 2 — broad soft spotlight, fades in on proximity */
 .mascot__bright {
   z-index: 3;
   opacity: 0;
   transition: opacity 0.4s ease-out;
   -webkit-mask-image: radial-gradient(
-    circle 200px at var(--mouse-x) var(--mouse-y),
+    circle 350px at var(--mouse-x) var(--mouse-y),
     black 0%,
-    black 130px,
-    transparent 200px
+    black 30%,
+    transparent 100%
   );
   mask-image: radial-gradient(
-    circle 200px at var(--mouse-x) var(--mouse-y),
+    circle 350px at var(--mouse-x) var(--mouse-y),
     black 0%,
-    black 130px,
-    transparent 200px
+    black 30%,
+    transparent 100%
   );
 }
 
-/* Hero tagline — signature line under the bear composition */
+/* Layer 3 — tight hot-spot; noticeably brighter, small radius */
+.mascot__hot {
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+  filter: brightness(1.4) saturate(1.2);
+  -webkit-mask-image: radial-gradient(
+    circle 180px at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    black 45%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 180px at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    black 45%,
+    transparent 100%
+  );
+}
+
+/* Hero tagline — signature line under the trio */
 .hero__tagline {
   font-family: var(--font-head);
   font-style: italic;
   font-size: clamp(1rem, 2vw, 1.4rem);
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.52);
   letter-spacing: 0.02em;
-  margin-top: -0.5rem;
+  margin-top: -0.25rem;
 }
 
-/* ─── Touch / reduced-motion: full brightness, static glow ─── */
+/* ─── Touch / reduced-motion: full brightness, no interaction ── */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .mascot__dim    { filter: none; transition: none; }
-  .mascot__bright { display: none; }
-  .mascot__glow {
-    opacity: 0.7 !important;
-    inset: -10%;
-    background: radial-gradient(
-      circle 180px at 50% 50%,
-      rgba(194, 255, 180, 0.13) 0%,
-      transparent 100%
-    );
-  }
+  .mascot__bright,
+  .mascot__hot    { display: none; }
 }
 
 /* ─── SERVICES ─────────────────────────────────────────────── */
@@ -769,9 +807,16 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 @media (max-width: 768px) {
   .bear--side { display: none; }
 
+  /* Reset full-bleed on mobile — bears don't need to overflow */
+  .bears {
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
   .bear--center {
-    width: 62vw;
-    height: 62vw;
+    width: 64vw;
+    height: 64vw;
   }
 
   .nav__links {

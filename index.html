@@ -58,18 +58,25 @@
       </div>
       <div class="hero__overlay"></div>
       <div class="hero__center container">
+
+        <!-- Screen-blend spotlight beam: background set by JS -->
+        <div class="hero__beam-spot" id="heroBeam" aria-hidden="true"></div>
+        <!-- Atmosphere particles: populated by JS -->
+        <div class="hero__particles" aria-hidden="true"></div>
+
         <h1 class="hero__headline">Make work<br />people actually<br /><em>want to watch.</em></h1>
+
         <div class="bears" id="bearsStage">
           <!-- Left side bear -->
           <div class="bear bear--side bear--left" aria-hidden="true">
             <img src="assets/teddy-plain.png" alt="" draggable="false" />
           </div>
 
-          <!-- Center bear — spotlight hero -->
+          <!-- Center bear — three-layer spotlight -->
           <div class="bear bear--center" id="mascot" role="img" aria-label="Teddy Berry, Spotlight Society mascot">
-            <div class="mascot__glow" aria-hidden="true"></div>
             <img class="mascot__dim"    src="assets/teddy-plain.png" alt="" aria-hidden="true" draggable="false" />
             <img class="mascot__bright" src="assets/teddy-plain.png" alt="" aria-hidden="true" draggable="false" />
+            <img class="mascot__hot"    src="assets/teddy-plain.png" alt="" aria-hidden="true" draggable="false" />
           </div>
 
           <!-- Right side bear — mirrored -->
