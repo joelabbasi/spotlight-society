@@ -222,17 +222,17 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: min(70vw, 420px);
+  min-height: min(70vw, 440px);
 }
 
 /* ─── Mascot spotlight reveal ──────────────────────────────── */
 .mascot {
   position: relative;
-  width: min(100%, 360px);
-  aspect-ratio: 4 / 5;
+  width: min(100%, 420px);
+  aspect-ratio: 1 / 1;
   --mouse-x: 50%;
   --mouse-y: 40%;
-  --spot-r: 180px;
+  --spot-r: 200px;
 }
 
 .mascot__glow {
@@ -241,7 +241,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   border-radius: 12px;
   background: radial-gradient(
     circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
-    rgba(194, 255, 180, 0.12) 0%,
+    rgba(194, 255, 180, 0.15) 0%,
     rgba(194, 255, 180, 0.04) 55%,
     transparent 100%
   );
