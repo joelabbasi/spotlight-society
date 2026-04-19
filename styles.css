@@ -608,11 +608,23 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   gap: 1rem;
 }
 
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .footer__logo {
   font-family: var(--font-head);
   font-style: italic;
   color: var(--white);
   font-size: 1.1rem;
+}
+
+.footer__teddy {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.28);
+  font-style: italic;
 }
 
 .footer__copy {
