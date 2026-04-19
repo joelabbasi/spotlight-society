@@ -8,7 +8,8 @@
       "Bash(echo \"Server PID: $!\")",
       "Bash(curl *)",
       "Bash(sips *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(git commit *)"
     ]
   }
 }

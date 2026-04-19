@@ -21,7 +21,7 @@ if (cursorDot && window.matchMedia('(hover: hover) and (pointer: fine)').matches
     }
   });
 
-  const hoverTargets = 'a, button, .mascot__dim, input, textarea, .work-item__thumb, .service-card';
+  const hoverTargets = 'a, button, .bear--center, input, textarea, .work-item__thumb, .service-card';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
@@ -101,39 +101,92 @@ const statsObserver = new IntersectionObserver((entries) => {
 const statsSection = document.querySelector('.stats');
 if (statsSection) statsObserver.observe(statsSection);
 
-/* ─── Mascot brightness spotlight ─────────────────────────── */
-const mascot     = document.getElementById('mascot');
-const heroSection = document.querySelector('.hero');
+/* ─── Mascot spotlight — lerp + distance brightness ──────── */
+(function () {
+  const mascotEl  = document.getElementById('mascot');
+  const heroEl    = document.querySelector('.hero');
+  if (!mascotEl || !heroEl) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if ( window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-if (mascot && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  let rafPending = false;
-  let pendingX, pendingY;
+  const dimEl    = mascotEl.querySelector('.mascot__dim');
+  const brightEl = mascotEl.querySelector('.mascot__bright');
+  const glowEl   = mascotEl.querySelector('.mascot__glow');
 
-  mascot.addEventListener('mousemove', (e) => {
-    const rect = mascot.getBoundingClientRect();
-    pendingX = ((e.clientX - rect.left) / rect.width  * 100).toFixed(2) + '%';
-    pendingY = ((e.clientY - rect.top)  / rect.height * 100).toFixed(2) + '%';
+  let rawX = 0, rawY = 0;
+  let lerpX = 0, lerpY = 0;
+  let inHero = false;
+  let hasReset = false;
 
-    if (!rafPending) {
-      rafPending = true;
-      requestAnimationFrame(() => {
-        mascot.style.setProperty('--mouse-x', pendingX);
-        mascot.style.setProperty('--mouse-y', pendingY);
-        rafPending = false;
-      });
+  function smoothstep(lo, hi, x) {
+    const t = Math.max(0, Math.min(1, (x - lo) / (hi - lo)));
+    return t * t * (3 - 2 * t);
+  }
+
+  heroEl.addEventListener('mouseenter', (e) => {
+    inHero = true;
+    hasReset = false;
+    /* Seed lerp at entry position so there's no pop-in */
+    rawX = lerpX = e.clientX;
+    rawY = lerpY = e.clientY;
+  });
+
+  heroEl.addEventListener('mousemove', (e) => {
+    rawX = e.clientX;
+    rawY = e.clientY;
+  });
+
+  heroEl.addEventListener('mouseleave', () => { inHero = false; });
+
+  function tick() {
+    if (inHero) {
+      /* Lerp toward raw cursor — trail factor 0.15 */
+      lerpX += (rawX - lerpX) * 0.15;
+      lerpY += (rawY - lerpY) * 0.15;
+
+      const rect = mascotEl.getBoundingClientRect();
+      const cx   = rect.left + rect.width  / 2;
+      const cy   = rect.top  + rect.height / 2;
+
+      /* Distance from lerped cursor to center-bear center */
+      const dist = Math.sqrt((lerpX - cx) ** 2 + (lerpY - cy) ** 2);
+
+      /* proximity: 1 = cursor at center, 0 = cursor far away */
+      const proximity = 1 - smoothstep(180, 620, dist);
+
+      /* Mascot-relative percentage (clamped 0-100) for the mask origin */
+      const pctX = Math.max(0, Math.min(100, (lerpX - rect.left) / rect.width  * 100));
+      const pctY = Math.max(0, Math.min(100, (lerpY - rect.top)  / rect.height * 100));
+
+      mascotEl.style.setProperty('--mouse-x', pctX.toFixed(2) + '%');
+      mascotEl.style.setProperty('--mouse-y', pctY.toFixed(2) + '%');
+
+      /* Ambient lift on dim layer: brightens slightly as cursor approaches */
+      if (dimEl) {
+        const bri = (0.62 + proximity * 0.28).toFixed(3);
+        const sat = (0.75 + proximity * 0.25).toFixed(3);
+        dimEl.style.filter = `brightness(${bri}) saturate(${sat})`;
+      }
+
+      /* Bright spotlight layer opacity — driven by proximity */
+      if (brightEl) brightEl.style.opacity = proximity.toFixed(3);
+
+      /* Accent glow opacity — follows proximity */
+      if (glowEl) glowEl.style.opacity = (proximity * 0.88).toFixed(3);
+
+    } else if (!hasReset) {
+      /* One-shot reset; CSS transitions on filter/opacity carry the fade-out */
+      hasReset = true;
+      if (dimEl)    dimEl.style.filter    = '';
+      if (brightEl) brightEl.style.opacity = '0';
+      if (glowEl)   glowEl.style.opacity   = '0';
     }
-  });
 
-  mascot.addEventListener('mouseenter', () => mascot.classList.add('glow-on'));
-  mascot.addEventListener('mouseleave', () => {
-    mascot.classList.remove('glow-on');
-    mascot.style.setProperty('--mouse-x', '50%');
-    mascot.style.setProperty('--mouse-y', '50%');
-  });
+    requestAnimationFrame(tick);
+  }
 
-  heroSection.addEventListener('mouseenter', () => mascot.classList.add('is-active'));
-  heroSection.addEventListener('mouseleave', () => mascot.classList.remove('is-active'));
-}
+  requestAnimationFrame(tick);
+}());
 
 /* ─── Contact form (client-side only) ────────────────────── */
 const form       = document.querySelector('.contact__form');

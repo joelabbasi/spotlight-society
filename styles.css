@@ -116,15 +116,25 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 }
 
 .nav__logo {
-  font-family: var(--font-head);
-  font-style: italic;
-  font-size: 1.35rem;
-  color: var(--white);
-  transition: color var(--transition);
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
+  line-height: 0;
 }
 
-.nav.scrolled .nav__logo { color: var(--near-black); }
+.nav__logo-img {
+  height: clamp(28px, 3.5vw, 38px);
+  width: auto;
+  display: block;
+  /* Drop shadow keeps the logo legible over dark hero backgrounds */
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.45));
+  transition: filter var(--transition);
+}
+
+/* When nav is solid/light, lighten the shadow so it doesn't look heavy */
+.nav.scrolled .nav__logo-img {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
+}
 
 .nav__links {
   display: flex;
@@ -250,33 +260,64 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   gap: 1rem;
 }
 
-/* ─── Mascot — single-image brightness spotlight ───────────── */
-.mascot {
+/* ─── Three-bear hero composition ──────────────────────────── */
+.bears {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.25rem, 1.5vw, 1.25rem);
+  width: 100%;
   position: relative;
-  width: min(55vh, 460px);
-  height: min(55vh, 460px);
+}
+
+/* Side bears — dimmed, 70% scale, nudged slightly down */
+.bear--side {
+  width: min(33.6vh, 266px);
+  height: min(33.6vh, 266px);
+  flex-shrink: 0;
+  transform: translateY(8%);
+}
+
+.bear--side img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0.40) saturate(0.60);
+  user-select: none;
+  pointer-events: none;
+  display: block;
+  -webkit-user-drag: none;
+}
+
+/* Mirror the right bear so both face inward */
+.bear--right img { transform: scaleX(-1); }
+
+/* Center bear — spotlight hero */
+.bear--center {
+  position: relative;
+  width: min(48vh, 380px);
+  height: min(48vh, 380px);
   flex-shrink: 0;
   --mouse-x: 50%;
   --mouse-y: 50%;
 }
 
+/* Ambient spotlight glow behind center bear */
 .mascot__glow {
   position: absolute;
-  inset: -15%;
+  inset: -18%;
   z-index: 1;
   pointer-events: none;
   border-radius: 50%;
   background: radial-gradient(
-    circle 240px at var(--mouse-x) var(--mouse-y),
-    rgba(194, 255, 180, 0.20) 0%,
-    rgba(194, 255, 180, 0.06) 55%,
+    circle 260px at var(--mouse-x) var(--mouse-y),
+    rgba(194, 255, 180, 0.22) 0%,
+    rgba(194, 255, 180, 0.07) 55%,
     transparent 100%
   );
   opacity: 0;
-  transition: opacity 0.4s ease;
+  /* Opacity is driven by JS; no CSS transition here to avoid fighting lerp */
 }
-
-.mascot.glow-on .mascot__glow { opacity: 1; }
 
 .mascot__dim,
 .mascot__bright {
@@ -287,47 +328,55 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   object-fit: contain;
   user-select: none;
   pointer-events: none;
-  draggable: false;
+  -webkit-user-drag: none;
 }
 
-/* Base layer — always visible, muted in the shadows */
+/* Shadow state — always visible, dims when cursor is far */
 .mascot__dim {
   z-index: 2;
   filter: brightness(0.62) saturate(0.75);
+  transition: filter 0.4s ease-out;
 }
 
-/* Bright layer — full quality, masked to spotlight circle only */
+/* Spotlight layer — masked to cursor circle, fades in as cursor approaches */
 .mascot__bright {
   z-index: 3;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease-out;
   -webkit-mask-image: radial-gradient(
     circle 200px at var(--mouse-x) var(--mouse-y),
     black 0%,
-    black 140px,
+    black 130px,
     transparent 200px
   );
   mask-image: radial-gradient(
     circle 200px at var(--mouse-x) var(--mouse-y),
     black 0%,
-    black 140px,
+    black 130px,
     transparent 200px
   );
 }
 
-/* Fade bright layer in when cursor is in the hero */
-.mascot.is-active .mascot__bright { opacity: 1; }
+/* Hero tagline — signature line under the bear composition */
+.hero__tagline {
+  font-family: var(--font-head);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
+  margin-top: -0.5rem;
+}
 
 /* ─── Touch / reduced-motion: full brightness, static glow ─── */
 @media (hover: none), (prefers-reduced-motion: reduce) {
-  .mascot__dim    { filter: none; }
+  .mascot__dim    { filter: none; transition: none; }
   .mascot__bright { display: none; }
   .mascot__glow {
-    opacity: 1;
+    opacity: 0.7 !important;
     inset: -10%;
     background: radial-gradient(
-      circle 200px at 50% 50%,
-      rgba(194, 255, 180, 0.12) 0%,
+      circle 180px at 50% 50%,
+      rgba(194, 255, 180, 0.13) 0%,
       transparent 100%
     );
   }
@@ -718,9 +767,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .mascot {
-    width: 60vw;
-    height: 60vw;
+  .bear--side { display: none; }
+
+  .bear--center {
+    width: 62vw;
+    height: 62vw;
   }
 
   .nav__links {
