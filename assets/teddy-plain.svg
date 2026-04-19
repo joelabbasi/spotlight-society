@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+
+  <!-- Ears -->
+  <circle cx="118" cy="112" r="38" fill="#113320"/>
+  <circle cx="282" cy="112" r="38" fill="#113320"/>
+  <!-- Ear inner -->
+  <circle cx="118" cy="112" r="22" fill="#1a4a2e"/>
+  <circle cx="282" cy="112" r="22" fill="#1a4a2e"/>
+
+  <!-- Body -->
+  <rect x="80" y="148" width="240" height="220" rx="40" ry="40" fill="#113320"/>
+
+  <!-- Head -->
+  <circle cx="200" cy="148" r="88" fill="#113320"/>
+
+  <!-- Belly oval -->
+  <ellipse cx="200" cy="280" rx="72" ry="88" fill="#c2ffb4"/>
+
+  <!-- Snout -->
+  <ellipse cx="200" cy="180" rx="36" ry="28" fill="#1a4a2e"/>
+
+  <!-- Eyes -->
+  <circle cx="170" cy="138" r="10" fill="#050e08"/>
+  <circle cx="230" cy="138" r="10" fill="#050e08"/>
+  <!-- Eye shine -->
+  <circle cx="174" cy="134" r="3" fill="#c2ffb4"/>
+  <circle cx="234" cy="134" r="3" fill="#c2ffb4"/>
+
+  <!-- Nose -->
+  <ellipse cx="200" cy="170" rx="8" ry="6" fill="#050e08"/>
+
+  <!-- Smile -->
+  <path d="M182 188 Q200 202 218 188" stroke="#050e08" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Arms -->
+  <rect x="44" y="196" width="52" height="108" rx="26" ry="26" fill="#113320"/>
+  <rect x="304" y="196" width="52" height="108" rx="26" ry="26" fill="#113320"/>
+
+  <!-- Legs -->
+  <rect x="118" y="340" width="60" height="88" rx="30" ry="30" fill="#113320"/>
+  <rect x="222" y="340" width="60" height="88" rx="30" ry="30" fill="#113320"/>
+
+  <!-- Feet -->
+  <ellipse cx="148" cy="428" rx="36" ry="20" fill="#0d2918"/>
+  <ellipse cx="252" cy="428" rx="36" ry="20" fill="#0d2918"/>
+
+  <!-- Label -->
+  <text x="200" y="478" text-anchor="middle" font-family="'Times New Roman', serif" font-style="italic" font-size="13" fill="rgba(194,255,180,0.35)" letter-spacing="2">TEDDY — PLAIN</text>
+
+</svg>
