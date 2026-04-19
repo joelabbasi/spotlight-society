@@ -21,7 +21,7 @@ if (cursorDot && window.matchMedia('(hover: hover) and (pointer: fine)').matches
     }
   });
 
-  const hoverTargets = 'a, button, .mascot, input, textarea, .work-item__thumb, .service-card';
+  const hoverTargets = 'a, button, .mascot__dim, input, textarea, .work-item__thumb, .service-card';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
@@ -101,13 +101,13 @@ const statsObserver = new IntersectionObserver((entries) => {
 const statsSection = document.querySelector('.stats');
 if (statsSection) statsObserver.observe(statsSection);
 
-/* ─── Mascot spotlight reveal ─────────────────────────────── */
-const mascot = document.getElementById('mascot');
+/* ─── Mascot brightness spotlight ─────────────────────────── */
+const mascot     = document.getElementById('mascot');
+const heroSection = document.querySelector('.hero');
 
-if (mascot && window.matchMedia('(hover: hover)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (mascot && heroSection && window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let rafPending = false;
-  let pendingX = null;
-  let pendingY = null;
+  let pendingX, pendingY;
 
   mascot.addEventListener('mousemove', (e) => {
     const rect = mascot.getBoundingClientRect();
@@ -124,10 +124,15 @@ if (mascot && window.matchMedia('(hover: hover)').matches && !window.matchMedia(
     }
   });
 
+  mascot.addEventListener('mouseenter', () => mascot.classList.add('glow-on'));
   mascot.addEventListener('mouseleave', () => {
+    mascot.classList.remove('glow-on');
     mascot.style.setProperty('--mouse-x', '50%');
-    mascot.style.setProperty('--mouse-y', '40%');
+    mascot.style.setProperty('--mouse-y', '50%');
   });
+
+  heroSection.addEventListener('mouseenter', () => mascot.classList.add('is-active'));
+  heroSection.addEventListener('mouseleave', () => mascot.classList.remove('is-active'));
 }
 
 /* ─── Contact form (client-side only) ────────────────────── */

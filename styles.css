@@ -191,118 +191,36 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 .hero__overlay {
   position: absolute;
   inset: 0;
-  /* Heavier wash on the left for type; right stays darker/cleaner so the mascot reads */
-  background: linear-gradient(
-    90deg,
-    rgba(17, 51, 32, 0.88) 0%,
-    rgba(17, 51, 32, 0.55) 42%,
-    rgba(8, 12, 10, 0.72) 70%,
-    rgba(5, 8, 7, 0.94) 100%
+  background: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    rgba(17, 51, 32, 0.25) 0%,
+    rgba(5, 8, 7, 0.65) 100%
   );
 }
 
-.hero__layout {
+/* ─── Hero centered layout ─────────────────────────────────── */
+.hero__center {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
-  gap: clamp(1.75rem, 4vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
   min-height: 100svh;
-  padding-top: var(--nav-h);
-  padding-bottom: clamp(2rem, 6vw, 4rem);
-}
-
-.hero__copy {
-  min-width: 0;
-}
-
-.hero__mascot-col {
-  display: flex;
-  align-items: center;
+  padding-top: calc(var(--nav-h) + clamp(1.5rem, 4vw, 3rem));
+  padding-bottom: clamp(3rem, 6vw, 5rem);
   justify-content: center;
-  min-height: min(70vw, 440px);
-}
-
-/* ─── Mascot spotlight reveal ──────────────────────────────── */
-.mascot {
-  position: relative;
-  width: min(100%, 420px);
-  aspect-ratio: 1 / 1;
-  --mouse-x: 50%;
-  --mouse-y: 40%;
-  --spot-r: 200px;
-}
-
-.mascot__glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  background: radial-gradient(
-    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
-    rgba(194, 255, 180, 0.15) 0%,
-    rgba(194, 255, 180, 0.04) 55%,
-    transparent 100%
-  );
-  pointer-events: none;
-  transition: background 0.05s linear;
-  z-index: 1;
-}
-
-.mascot__base,
-.mascot__styled {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  user-select: none;
-}
-
-.mascot__base  { z-index: 2; }
-.mascot__styled { z-index: 3; }
-
-/* Spotlight mask — styled layer only visible inside the circle */
-.mascot__styled {
-  -webkit-mask-image: radial-gradient(
-    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
-    transparent 0%,
-    transparent 55%,
-    black 75%
-  );
-  mask-image: radial-gradient(
-    circle var(--spot-r) at var(--mouse-x) var(--mouse-y),
-    transparent 0%,
-    transparent 55%,
-    black 75%
-  );
-}
-
-/* Touch / reduced-motion fallback: show styled version statically */
-@media (hover: none) {
-  .mascot__styled {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .mascot__glow { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mascot__styled {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .mascot__glow { display: none; }
+  gap: clamp(1.25rem, 2.5vw, 2rem);
 }
 
 .hero__headline {
   font-family: var(--font-head);
   font-style: italic;
-  font-size: clamp(3rem, 9vw, 7.5rem);
+  font-size: clamp(2.75rem, 7vw, 6.5rem);
   line-height: 1.05;
   color: var(--white);
-  margin-bottom: 1.5rem;
+  max-width: 800px;
 }
 
 .hero__headline em {
@@ -310,18 +228,109 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   font-style: italic;
 }
 
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .hero__sub {
-  max-width: 480px;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  max-width: 520px;
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
   color: rgba(255,255,255,0.82);
-  margin-bottom: 2.5rem;
   font-weight: 700;
+  line-height: 1.7;
 }
 
 .hero__ctas {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
+}
+
+/* ─── Mascot — single-image brightness spotlight ───────────── */
+.mascot {
+  position: relative;
+  width: min(55vh, 460px);
+  height: min(55vh, 460px);
+  flex-shrink: 0;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.mascot__glow {
+  position: absolute;
+  inset: -15%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle 240px at var(--mouse-x) var(--mouse-y),
+    rgba(194, 255, 180, 0.20) 0%,
+    rgba(194, 255, 180, 0.06) 55%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.mascot.glow-on .mascot__glow { opacity: 1; }
+
+.mascot__dim,
+.mascot__bright {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  draggable: false;
+}
+
+/* Base layer — always visible, muted in the shadows */
+.mascot__dim {
+  z-index: 2;
+  filter: brightness(0.62) saturate(0.75);
+}
+
+/* Bright layer — full quality, masked to spotlight circle only */
+.mascot__bright {
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  -webkit-mask-image: radial-gradient(
+    circle 200px at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    black 140px,
+    transparent 200px
+  );
+  mask-image: radial-gradient(
+    circle 200px at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    black 140px,
+    transparent 200px
+  );
+}
+
+/* Fade bright layer in when cursor is in the hero */
+.mascot.is-active .mascot__bright { opacity: 1; }
+
+/* ─── Touch / reduced-motion: full brightness, static glow ─── */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .mascot__dim    { filter: none; }
+  .mascot__bright { display: none; }
+  .mascot__glow {
+    opacity: 1;
+    inset: -10%;
+    background: radial-gradient(
+      circle 200px at 50% 50%,
+      rgba(194, 255, 180, 0.12) 0%,
+      transparent 100%
+    );
+  }
 }
 
 /* ─── SERVICES ─────────────────────────────────────────────── */
@@ -709,24 +718,9 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 /* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero__layout {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding-bottom: clamp(3rem, 10vw, 5rem);
-  }
-
-  .hero__mascot-col {
-    min-height: 0;
-    order: 2;
-  }
-
-  .hero__copy {
-    order: 1;
-  }
-
-  .hero__mascot-col .hero__mascot-placeholder {
-    width: 70vw;
-    max-width: 420px;
+  .mascot {
+    width: 60vw;
+    height: 60vw;
   }
 
   .nav__links {
