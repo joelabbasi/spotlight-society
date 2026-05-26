@@ -1,3 +1,15 @@
 .DS_Store
 assets/.DS_Store
 2
+
+# Claude local settings
+.claude/
+
+# Original large photos (use assets/photos-web/ instead)
+assets/drive-download-20260526T025945Z-3-001/
+
+# Videos — hosted on Cloudflare Stream
+assets/*.mp4
+
+# Utility scripts
+extractFrame.py

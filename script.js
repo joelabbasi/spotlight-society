@@ -21,54 +21,193 @@ if (cursorDot && window.matchMedia('(hover: hover) and (pointer: fine)').matches
     }
   });
 
-  const hoverTargets = 'a, button, .bear--center, input, textarea, .work-item__thumb, .service-card';
+  const hoverTargets = 'a, button, .bear--center, input, textarea, .work-item__thumb, .service-card, .di';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   });
 }
 
+/* ─── Per-item dynamic islands: dock on scroll, open wider on hover (CSS) ─ */
+(function initDynamicIslands() {
+  const nodes = document.querySelectorAll('.di');
+  if (!nodes.length) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    nodes.forEach((el) => el.classList.add('di-in'));
+    return;
+  }
+
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        obs.unobserve(el);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => el.classList.add('di-in'));
+        });
+      });
+    },
+    { threshold: 0.06, rootMargin: '0px 0px -5% 0px' }
+  );
+
+  nodes.forEach((el) => obs.observe(el));
+}());
+
+/* ─── Service cards: stable “open” on pointer devices (avoids :hover flicker during grid reflow) ─ */
+(function initServiceCardOpenState() {
+  const mm = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (!mm.matches) return;
+
+  const OPEN = 'service-card--open';
+  const LEAVE_MS = 240;
+
+  document.querySelectorAll('.service-card--expand').forEach((card) => {
+    let leaveTimer = null;
+
+    function clearLeaveTimer() {
+      if (leaveTimer !== null) {
+        window.clearTimeout(leaveTimer);
+        leaveTimer = null;
+      }
+    }
+
+    function openFromPointer() {
+      clearLeaveTimer();
+      card.classList.add(OPEN);
+    }
+
+    function scheduleCloseFromPointer() {
+      clearLeaveTimer();
+      leaveTimer = window.setTimeout(() => {
+        leaveTimer = null;
+        if (!card.matches(':focus-within')) card.classList.remove(OPEN);
+      }, LEAVE_MS);
+    }
+
+    card.addEventListener('mouseenter', openFromPointer);
+    card.addEventListener('mouseleave', scheduleCloseFromPointer);
+
+    card.addEventListener('focusout', (e) => {
+      if (card.contains(e.relatedTarget)) return;
+      clearLeaveTimer();
+      window.requestAnimationFrame(() => {
+        if (!card.matches(':focus-within')) card.classList.remove(OPEN);
+      });
+    });
+  });
+}());
+
 /* ─── Nav: scroll state + mobile toggle ───────────────────── */
-const nav     = document.getElementById('nav');
-const burger  = document.getElementById('burger');
+const nav      = document.getElementById('nav');
+const burger   = document.getElementById('burger');
 const navLinks = document.getElementById('navLinks');
 
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 20);
-}, { passive: true });
+if (nav) {
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+}
 
-burger.addEventListener('click', () => {
-  const open = burger.classList.toggle('open');
-  navLinks.classList.toggle('open', open);
-  burger.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-
-// Close mobile menu when a link is clicked
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    burger.classList.remove('open');
-    navLinks.classList.remove('open');
-    burger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+if (burger && navLinks) {
+  burger.addEventListener('click', () => {
+    const open = burger.classList.toggle('open');
+    navLinks.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
   });
-});
 
-/* ─── Scroll-reveal ───────────────────────────────────────── */
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('open');
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
+/* ─── Scroll-reveal (staggered, studio-style) ─────────────────
+   Double rAF before .visible fixes browsers that skip CSS transitions
+   when .reveal and .visible land in the same frame. */
+function revealElement(el) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.classList.add('visible');
+      const section = el.closest('section');
+      if (section) section.classList.add('section--in-view');
+    });
+  });
+}
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+      revealElement(entry.target);
       revealObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
+}, {
+  threshold: 0.06,
+  rootMargin: '0px 0px -2% 0px',
+});
 
-document.querySelectorAll(
-  '.service-card, .work-item, .stat, .about__text, .about__image, .contact__left, .contact__form'
-).forEach((el, i) => {
+function stagger(el, i, base = 0) {
+  el.style.transitionDelay = `${base + (i % 5) * 90}ms`;
+}
+
+document.querySelectorAll('.section-intro').forEach((el, i) => {
   el.classList.add('reveal');
-  el.style.transitionDelay = `${(i % 4) * 80}ms`;
+  stagger(el, i, 0);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.service-card').forEach((el, i) => {
+  el.classList.add('reveal');
+  stagger(el, i, 40);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.work-item').forEach((el, i) => {
+  el.classList.add('reveal', 'reveal--scale');
+  stagger(el, i, 60);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.stat').forEach((el, i) => {
+  el.classList.add('reveal');
+  stagger(el, i, 30);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.about__text').forEach((el, i) => {
+  el.classList.add('reveal', 'reveal--from-left');
+  stagger(el, i, 0);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.about__image').forEach((el, i) => {
+  el.classList.add('reveal', 'reveal--from-right');
+  stagger(el, i, 80);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.contact__left').forEach((el, i) => {
+  el.classList.add('reveal', 'reveal--from-left');
+  stagger(el, i, 0);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.contact__form').forEach((el, i) => {
+  el.classList.add('reveal', 'reveal--from-right');
+  stagger(el, i, 100);
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.footer__inner').forEach((el) => {
+  el.classList.add('reveal');
   revealObserver.observe(el);
 });
 
@@ -100,6 +239,66 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 const statsSection = document.querySelector('.stats');
 if (statsSection) statsObserver.observe(statsSection);
+
+/* ─── Hero scroll parallax (studio-style depth while scrolling) ─ */
+(function initHeroScrollParallax() {
+  const hero = document.querySelector('.hero');
+  const head = document.querySelector('.hero-parallax--head');
+  const bears = document.getElementById('bearsStage');
+  const tag = document.querySelector('.hero-parallax--tag');
+  const copy = document.querySelector('.hero-parallax--copy');
+  if (!hero) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  let ticking = false;
+
+  function clearParallaxStyles() {
+    [head, bears, tag, copy].forEach((el) => {
+      if (!el) return;
+      el.style.transform = '';
+      el.style.opacity = '';
+    });
+  }
+
+  function update() {
+    const scrollY = window.scrollY;
+    /* Let CSS entrance animations own transforms until user scrolls */
+    if (scrollY < 12) {
+      clearParallaxStyles();
+      ticking = false;
+      return;
+    }
+
+    const heroH = hero.offsetHeight || 1;
+    const p = Math.min(1, Math.max(0, scrollY / (heroH * 0.5)));
+    const ease = p * p;
+
+    if (head) {
+      head.style.transform = `translate3d(0, ${ease * 64}px, 0) scale(${1 - ease * 0.045})`;
+    }
+    if (bears) {
+      bears.style.transform = `translate3d(0, ${ease * 96}px, 0)`;
+    }
+    if (tag) {
+      tag.style.transform = `translate3d(0, ${ease * 52}px, 0)`;
+    }
+    if (copy) {
+      copy.style.transform = `translate3d(0, ${ease * 68}px, 0)`;
+      copy.style.opacity = String(Math.max(0.78, 1 - ease * 0.22));
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+}());
 
 /* ─── Cinematic spotlight — lerp + distance + three layers ─── */
 (function () {
@@ -214,11 +413,45 @@ if (statsSection) statsObserver.observe(statsSection);
   requestAnimationFrame(tick);
 }());
 
+/* ─── Video modal / lightbox ──────────────────────────────── */
+(function initVideoModal() {
+  const modal   = document.getElementById('video-modal');
+  const player  = document.getElementById('video-modal-player');
+  if (!modal || !player) return;
+
+  const closeBtn = modal.querySelector('.video-modal__close');
+  const backdrop = modal.querySelector('.video-modal__backdrop');
+
+  function openModal(ytId) {
+    player.src = `https://www.youtube.com/embed/${ytId}?autoplay=1`;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    player.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.work-item__thumb[data-yt]').forEach((thumb) => {
+    thumb.addEventListener('click', () => openModal(thumb.dataset.yt));
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+}());
+
 /* ─── Contact form (client-side only) ────────────────────── */
 const form       = document.querySelector('.contact__form');
 const formStatus = document.getElementById('formStatus');
 
-form.addEventListener('submit', (e) => {
+if (!form || !formStatus) {
+  /* no-op */
+} else form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = Object.fromEntries(new FormData(form));
 
@@ -228,16 +461,30 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  // Swap button state while "sending"
   const btn = form.querySelector('button[type="submit"]');
   btn.textContent = 'Sending…';
   btn.disabled = true;
 
-  setTimeout(() => {
-    formStatus.textContent = "Thanks! We'll be in touch soon.";
-    formStatus.style.color = '';
-    form.reset();
-    btn.textContent = 'Send It';
-    btn.disabled = false;
-  }, 1200);
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form),
+    });
+
+    if (res.ok) {
+      formStatus.textContent = "Thanks! We'll be in touch soon.";
+      formStatus.style.color = '';
+      form.reset();
+    } else {
+      formStatus.textContent = 'Something went wrong. Try emailing directly.';
+      formStatus.style.color = '#ff8a8a';
+    }
+  } catch {
+    formStatus.textContent = 'Network error. Try emailing directly.';
+    formStatus.style.color = '#ff8a8a';
+  }
+
+  btn.textContent = 'Send It';
+  btn.disabled = false;
 });
