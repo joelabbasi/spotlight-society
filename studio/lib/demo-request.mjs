@@ -1,6 +1,5 @@
 const RECIPIENT = 'joe@spotlightsociety.org';
 const ENDPOINT = `https://formsubmit.co/ajax/${RECIPIENT}`;
-const SITE = 'https://spotlight-studio-preview.sugarybell9.chatgpt.site/';
 const attempts = new Map();
 const WINDOW = 10 * 60_000;
 
@@ -34,6 +33,7 @@ async function readBody(request) {
 }
 
 export async function submitDemo(request,fetcher=fetch) {
+  const site = `${new URL(request.url).origin}/`;
   const origin=request.headers.get('origin');
   if(!origin || origin !== new URL(request.url).origin) return json({ok:false,message:'Please submit your request from this website.'},403);
   const contentType=request.headers.get('content-type')||'';
@@ -51,8 +51,8 @@ export async function submitDemo(request,fetcher=fetch) {
   entry.count++;attempts.set(ip,entry);
   try {
     const response=await fetcher(ENDPOINT,{
-      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Referer':SITE},
-      body:JSON.stringify({email:value.email,phone:value.phone,'Request details':value.details,_replyto:value.email,_subject:'Demo request — Spotlight Society',_template:'table',_url:SITE}),
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Referer':site},
+      body:JSON.stringify({email:value.email,phone:value.phone,'Request details':value.details,_replyto:value.email,_subject:'Demo request — Spotlight Society',_template:'table',_url:site}),
       signal:AbortSignal.timeout(15_000),
     });
     let result;try{result=await response.json();}catch{return json({ok:false,message:'Your request could not be confirmed. Please email joe@spotlightsociety.org directly.'},502);}
