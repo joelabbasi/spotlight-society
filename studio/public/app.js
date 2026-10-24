@@ -165,7 +165,9 @@ $$('[data-video]').forEach(a => a.addEventListener('click', e => {
   $('#video-title').textContent = a.dataset.title;
   $('#youtube-link').href = a.href;
   const frame = document.createElement('iframe');
-  frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(a.dataset.video)}?autoplay=1&rel=0`;
+  frame.src = a.dataset.videoProvider === 'drive'
+    ? `https://drive.google.com/file/d/${encodeURIComponent(a.dataset.video)}/preview`
+    : `https://www.youtube-nocookie.com/embed/${encodeURIComponent(a.dataset.video)}?autoplay=1&rel=0`;
   frame.title = a.dataset.title;
   frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   frame.allowFullscreen = true;
