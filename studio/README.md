@@ -26,7 +26,7 @@ The build outputs a Cloudflare Worker and static assets into `dist/server/` and 
 
 ## Launch status
 
-This branch does not change the existing root site's Cloudflare Pages deployment. Before switching production, configure hosting for the generated Worker, confirm the public domain and form origin, and verify gallery loading and a consented form submission on that domain. The form currently identifies the private preview URL to FormSubmit; review `lib/demo-request.mjs` during the production migration.
+This branch does not change the existing root site's Cloudflare Pages deployment. Before switching production, configure hosting for the generated Worker, confirm the public domain and form origin, and verify gallery loading and a consented form submission on that domain. The form identifies the current request origin to FormSubmit, supporting both preview and production domains.
 
 The Sites project identity and development helpers are retained for preview compatibility. No account credentials or local environment files are included.
 
@@ -35,3 +35,10 @@ The Sites project identity and development helpers are retained for preview comp
 The gallery still includes both Jonah clips. Removing the longer duplicate, further gallery styling, and a weekly scheduled check have not been completed. The gallery currently refreshes from Drive every 60 seconds while visible; this is separate from a weekly scheduled check.
 
 See `DEMO_FORM.md` for the activation and delivery-test status, and `DOMAIN_FIX.md` for the unresolved apex-domain setup.
+
+
+## Cloudflare Pages production
+
+The existing Pages project uses advanced mode with the same gallery and demo handlers as the Sites preview. Build from the repository root using `cd studio && npm ci && npm run build:pages` and publish `studio/dist/pages`. Production tracks `main`; other branches produce previews. No new secrets or storage bindings are required.
+
+The Pages build serves the authored homepage and gallery as static documents and bundles only `/api/*` into `_worker.js`. Production social metadata uses `https://www.spotlightsociety.org`. `npm run build` remains the Vinext/Sites build.
