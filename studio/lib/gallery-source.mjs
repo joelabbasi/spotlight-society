@@ -1,3 +1,4 @@
+import { mediaTitle } from './media-titles.mjs';
 export const FOLDER_ID = '1Z80OtvvGuXiz9U2mYhVg8sPtFkGDIwjj';
 export const FOLDER_URL = `https://drive.google.com/drive/folders/${FOLDER_ID}`;
 const MAX_BYTES = 2_000_000;
@@ -57,7 +58,7 @@ export async function getGallery({ force = false } = {}) {
 export async function galleryResponse() {
   try {
     const data = await getGallery();
-    return Response.json({items:data.items.map(({thumbnail,...item})=>({...item,thumbnail:`/api/gallery/thumbnail?id=${item.id}`})),folderUrl:FOLDER_URL,checkedAt:new Date(data.time).toISOString(),stale:data.stale}, {headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+    return Response.json({items:data.items.map(({thumbnail,...item})=>({...item,title:mediaTitle(item),thumbnail:`/api/gallery/thumbnail?id=${item.id}`})),folderUrl:FOLDER_URL,checkedAt:new Date(data.time).toISOString(),stale:data.stale}, {headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   } catch {
     return Response.json({error:'The gallery is temporarily unavailable. Please try again or open the source folder.',folderUrl:FOLDER_URL}, {status:503,headers:{'Cache-Control':'no-store'}});
   }
