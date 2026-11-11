@@ -11,3 +11,7 @@
 - Screenshots: desktop-home.jpg, mobile-home.jpg, donation-preview.jpg.
 
 Automated checks intentionally do not make any donation, submit any project, or assert third-party availability. A full assistive-technology audit and broad device/browser matrix remain pre-launch work.
+
+## Motion pass
+
+Added layered globe parallax, floating platform cards, CSS perspective on track cards, staggered reveal transitions, persistent platform shortcuts, scroll progress and native horizontal gallery snapping. Motion pause toggle changes state correctly. Gallery next control advances scroll position. Browser checks at 1710px and 390px show no page-level horizontal overflow. Gallery supports native touch scrolling, arrow controls and keyboard arrows. Reduced-motion preferences disable decorative animations and reveal hiding. Screenshot: motion-home.jpg. No new animation library or WebGL dependency.
