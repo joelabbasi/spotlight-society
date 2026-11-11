@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "globalactionmosaic",
+    "title": "Global Action Mosaic",
+    "summary": "Community-led SDG initiatives, mapping and connections.",
+    "source_url": "https://www.humanitariantracker.org/globalactionmosaic",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "syria-tracker",
+    "title": "Syria Tracker",
+    "summary": "Crowdsourced conflict reporting, methods, analysis and applications.",
+    "source_url": "https://www.humanitariantracker.org/syria-tracker",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "analysis-of-syria-killings",
+    "title": "Syria Killings Analysis",
+    "summary": "Historical dashboard developed with SumAll; sensitive data requiring dates and context.",
+    "source_url": "https://www.humanitariantracker.org/analysis-of-syria-killings",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "analysis-of-syria-polio-vaccination",
+    "title": "Syria Polio Vaccination Analysis",
+    "summary": "Historical vaccination-campaign analysis with ACU and SumAll.",
+    "source_url": "https://www.humanitariantracker.org/analysis-of-syria-polio-vaccination",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "flu-tracker",
+    "title": "Flu Tracker",
+    "summary": "Historical disease-related social-media API and mapping project; current operation unverified.",
+    "source_url": "https://www.humanitariantracker.org/flu-tracker",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "epidemic-tracker",
+    "title": "Epidemic Tracker",
+    "summary": "Disease surveillance questionnaires, including English and Arabic tools.",
+    "source_url": "https://www.humanitariantracker.org/epidemic-tracker",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "refugee-education-tracker",
+    "title": "Refugee Education Tracker",
+    "summary": "Embedded form and KoboToolbox mobile link; little explanatory text.",
+    "source_url": "https://www.humanitariantracker.org/refugee-education-tracker",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "development-tracker",
+    "title": "Development Tracker",
+    "summary": "Three screenshot views of relief/development tracking; no live dashboard confirmed.",
+    "source_url": "https://www.humanitariantracker.org/development-tracker",
+    "status": "Listed on original website; current service availability unverified"
+  },
+  {
+    "slug": "miguate",
+    "title": "Mi Guate",
+    "summary": "Spanish-language anonymous reporting of corruption in Guatemala.",
+    "source_url": "https://www.humanitariantracker.org/miguate",
+    "status": "Listed on original website; current service availability unverified"
+  }
+]

@@ -45,3 +45,9 @@ User-supplied video: https://drive.google.com/file/d/1x1CxhqPKDZY-rNXhnIEjZk9vxT
 ## Impact figures
 
 User explicitly supplied and requested the screenshot figures: 346 SDG-aligned projects, 14 years of community contributions, 1 public-facing global mosaic and an illustrative infinity symbol for ways local action can travel. Displayed as supplied draft figures, not live totals.
+
+## Complete original-site archive
+
+Original-site content audit integrated into `archive.html` and `about.html`: nine project records, 62 coverage records (61 article URLs; one deliberately unlinked), 69 publication listings, six historical YouTube talks and two Vimeo analysis clips, plus public source/asset indexes. Inputs retain dates and source URLs. Historical source descriptions are paraphrased; third-party articles and paper excerpts are not republished.
+
+Added 2015 Index on Censorship nomination with verified organizer article. Kept the 2017 Classy finalist claim separately attributed to HT’s own announcement because the historical organizer destinations remain unverified. The team page is linked and names attributed, without asserting outdated roles.

@@ -2,6 +2,8 @@
 from html.parser import HTMLParser
 from pathlib import Path
 import unittest
+import json
+from collections import Counter
 ROOT=Path(__file__).resolve().parents[1]/'dist'
 class Page(HTMLParser):
  def __init__(self,path):
@@ -33,4 +35,23 @@ class SiteTests(unittest.TestCase):
   for path in ROOT.glob('*.html'):
    for tag,a in Page(path).elements:
     if tag=='a':self.assertNotEqual(a.get('href'),'#')
+class ArchiveTests(unittest.TestCase):
+ def test_complete_archive_categories(self):
+  class Counts(HTMLParser):
+   def __init__(self):super().__init__();self.category=None;self.counts=Counter()
+   def handle_starttag(self,tag,attrs):
+    a=dict(attrs)
+    if tag=='section' and 'data-category' in a:self.category=a['data-category']
+    if 'data-entry' in a and self.category:self.counts[self.category]+=1
+   def handle_endtag(self,tag):
+    if tag=='section':self.category=None
+  p=Counts();p.feed((ROOT/'archive.html').read_text())
+  self.assertEqual({k:p.counts[k] for k in ['projects','recognitions','coverage','publications','videos']},{'projects':9,'recognitions':6,'coverage':62,'publications':69,'videos':8})
+ def test_public_indexes_exclude_long_source_excerpts(self):
+  news=json.loads((ROOT/'data/news-catalog.json').read_text())
+  pubs=json.loads((ROOT/'data/publications-catalog.json').read_text())
+  self.assertEqual(len(news),62);self.assertEqual(sum(bool(x['source_url']) for x in news),61)
+  self.assertEqual(len(pubs),69)
+  self.assertTrue(all('description' not in x for x in news))
+  self.assertTrue(all('original_listing' not in x for x in pubs))
 if __name__=='__main__':unittest.main()

@@ -24,3 +24,9 @@ Donation settings are temporary browser state only. There is no Stripe code, pay
 6. Later, connect the authorized payment account using a separate implementation with server-side checkout, verified webhooks, receipts and recurring-giving cancellation. No payment integration is included here.
 
 See `references/SOURCES.md` for provenance and `qa/VERIFICATION.md` for checks and limitations. Screenshots are in `qa/`.
+
+## Complete archive update
+
+`archive.html` is a dedicated searchable library with all nine original projects, five independently sourced milestone entries plus the separately attributed 2017 HT announcement, 62 news entries, 69 publication listings, six talks/panels and two analysis clips. Sources includes the full page/link/image reference collection and downloadable metadata indexes. `about.html` adds mission, methods, ethics context, team-source references and involvement routes. Homepage Archive navigation now opens the dedicated page.
+
+Regenerate archive markup and indexes with `python3 scripts/build_archive.py`. Inputs are retained in `references/archive-input/` as metadata, without long copied article excerpts. `dist/archive.js` provides category/search filters, progressive expansion and click-to-load videos. Static entries remain readable with JavaScript disabled.

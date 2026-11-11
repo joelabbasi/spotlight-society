@@ -15,3 +15,7 @@ Automated checks intentionally do not make any donation, submit any project, or 
 ## Motion pass
 
 Added layered globe parallax, floating platform cards, CSS perspective on track cards, staggered reveal transitions, persistent platform shortcuts, scroll progress and native horizontal gallery snapping. Motion pause toggle changes state correctly. Gallery next control advances scroll position. Browser checks at 1710px and 390px show no page-level horizontal overflow. Gallery supports native touch scrolling, arrow controls and keyboard arrows. Reduced-motion preferences disable decorative animations and reveal hiding. Screenshot: motion-home.jpg. No new animation library or WebGL dependency.
+
+## Complete archive update
+
+Six automated checks pass, including exact archive content counts and exclusion of long copied excerpts from public indexes. Browser: category filtering works; Show all exposes all 62 news records; impossible search shows empty state; publication search for “polio” finds two records; source search finds matching references; archived video click creates the correct titled iframe. At 390px, archive and approach pages have no horizontal overflow. Homepage Archive link resolves to `archive.html`; five independently sourced homepage timeline entries remain linked. Third-party article/link availability and playback of every historical video are not guaranteed. Screenshot: archive-desktop.jpg.
