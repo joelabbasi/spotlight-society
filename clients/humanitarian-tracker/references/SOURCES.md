@@ -37,3 +37,7 @@ The Drive connector exposed the album but no child images. Its public folder lis
 | community-3.jpg | Copy of C8558T01.jpg | https://drive.google.com/file/d/1kBJ2qs8C7IqBAjanF5t1obxLXrmt8gvr/view |
 
 Typography uses Google Fonts DM Sans and Playfair Display with system fallbacks. The hero and platform illustration use the supplied HT globe, CSS orbits and a decorative grid. The map illustration is explicitly labelled as not live data.
+
+## Film
+
+User-supplied video: https://drive.google.com/file/d/1YtrTrE9HFnuWGM4HGpa9Tm9OCUY7w1Dg/view — embedded using Google Drive’s `/preview` player, with a persistent direct-view fallback link. File sharing permissions are unchanged.
