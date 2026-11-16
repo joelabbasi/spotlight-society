@@ -57,12 +57,16 @@ class ArchiveTests(unittest.TestCase):
 class ClientReviewTests(unittest.TestCase):
  def test_approved_homepage_and_team(self):
   s=(ROOT/'index.html').read_text()
-  self.assertEqual(s.count('Humanitarian Tracker is a U.S.-based 501(c)(3) organization.'),1)
+  self.assertEqual(s.count('Humanitarian Tracker empowers citizens to turn local knowledge into humanitarian action. Using crowdsourcing and AI, we work across humanitarian reporting, global health, education, and sustainable development. Our AI-enhanced platform, Global Action Mosaic, helps community-led initiatives gain visibility, share knowledge, and connect with peers worldwide. We are a U.S.-based 501(c)(3) nonprofit in consultative status with the UN Economic and Social Council, with no political or religious affiliation.'),1)
   for phrase in ['data-count="346"','data-count="79"','<strong>One</strong>','Jeni Craswell','Austin Holmes','Mina Aziz','Hend Alhinnawi','Safaa Aldib','Commit to Data Campaign','In collaboration with Open Data Watch and PARIS21']:
    self.assertIn(phrase,s)
   for phrase in ['A HUMANITARIAN TRACKER INITIATIVE','The original mosaic','id="intro"','id="approach"','Warisha Soomro','Dana Ghazi','Lauren Wolfe','Majd Isreb','John Page','David Scales','Karolos Talvis']:
    self.assertNotIn(phrase,s)
   self.assertNotIn('Humanitarian Tracker is a U.S.-based',(ROOT/'about.html').read_text())
+  for name in ['index.html','donate.html','archive.html','gallery.html']:
+   page=(ROOT/name).read_text()
+   self.assertEqual(page.count('EIN | 46-3356967'),1)
+   self.assertIn('class="footer-ein"',page[page.index('<footer>'):])
  def test_all_gallery_photos_are_local(self):
   page=Page(ROOT/'gallery.html');photos=[a for t,a in page.elements if 'data-photo' in a]
   self.assertEqual(len(photos),156)
