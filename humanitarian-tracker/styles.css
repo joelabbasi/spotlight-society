@@ -21,3 +21,5 @@
 @media(max-width:760px){.team-card:nth-child(-n+2){display:block}.team-card:nth-child(-n+2) img{float:left;width:95px;height:120px;margin:20px 18px 10px 20px;object-fit:cover}.team-card:nth-child(-n+2) .team-copy{padding:20px}.team-card:nth-child(-n+2) .team-copy>p:last-child{clear:both;padding-top:18px;margin-top:0}.team-card:nth-child(-n+2) .team-role{min-height:35px}}
 
 .stats-note{font-size:12px;line-height:1.7;opacity:.8;margin-top:20px}.stats-note a{text-decoration:underline}
+
+footer .footer-identity{display:flex;flex-direction:column;align-items:flex-start;gap:12px}footer .footer-ein{margin:0;font-size:12px;letter-spacing:.04em;line-height:1.5;white-space:nowrap}
