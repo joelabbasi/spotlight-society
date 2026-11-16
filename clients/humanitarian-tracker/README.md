@@ -30,3 +30,7 @@ See `references/SOURCES.md` for provenance and `qa/VERIFICATION.md` for checks a
 `archive.html` is a dedicated searchable library with all nine original projects, five independently sourced milestone entries plus the separately attributed 2017 HT announcement, 62 news entries, 69 publication listings, six talks/panels and two analysis clips. Sources includes the full page/link/image reference collection and downloadable metadata indexes. `about.html` adds mission, methods, ethics context, team-source references and involvement routes. Homepage Archive navigation now opens the dedicated page.
 
 Regenerate archive markup and indexes with `python3 scripts/build_archive.py`. Inputs are retained in `references/archive-input/` as metadata, without long copied article excerpts. `dist/archive.js` provides category/search filters, progressive expansion and click-to-load videos. Static entries remain readable with JavaScript disabled.
+
+## November client review
+
+Homepage now uses the supplied GAM wordmark, updated tagline and impact figures, one approved About paragraph, the five requested team profiles and revised Commit to Data video copy. `gallery.html` hosts 50 local event photos with progressive loading and a keyboard-accessible viewer. Run `python3 scripts/build_gallery.py` to regenerate its static markup from `dist/data/gallery.json`. The earlier `about.html` route redirects to the homepage About section. See `references/CLIENT-REVIEW-2026-11-14.md` for decisions and remaining client materials.

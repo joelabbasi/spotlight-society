@@ -54,4 +54,25 @@ class ArchiveTests(unittest.TestCase):
   self.assertEqual(len(pubs),69)
   self.assertTrue(all('description' not in x for x in news))
   self.assertTrue(all('original_listing' not in x for x in pubs))
+class ClientReviewTests(unittest.TestCase):
+ def test_approved_homepage_and_team(self):
+  s=(ROOT/'index.html').read_text()
+  self.assertEqual(s.count('Humanitarian Tracker is a U.S.-based 501(c)(3) organization.'),1)
+  for phrase in ['data-count="369"','data-count="79"','<strong>One</strong>','Jeni Craswell','Austin Holmes','Mina Aziz','Hend Alhinnawi','Safaa Aldib','Commit to Data Campaign','In collaboration with Open Data Watch and PARIS21']:
+   self.assertIn(phrase,s)
+  for phrase in ['A HUMANITARIAN TRACKER INITIATIVE','The original mosaic','id="intro"','id="approach"','Warisha Soomro','Dana Ghazi','Lauren Wolfe','Majd Isreb','John Page','David Scales','Karolos Talvis']:
+   self.assertNotIn(phrase,s)
+  self.assertNotIn('Humanitarian Tracker is a U.S.-based',(ROOT/'about.html').read_text())
+ def test_all_gallery_photos_are_local(self):
+  page=Page(ROOT/'gallery.html');photos=[a for t,a in page.elements if 'data-photo' in a]
+  self.assertEqual(len(photos),50)
+  for photo in photos:
+   self.assertTrue(photo['href'].startswith('assets/'))
+   self.assertTrue((ROOT/photo['href']).is_file())
+  self.assertNotIn('drive.google.com',(ROOT/'gallery.html').read_text())
+ def test_simplified_archive_hero(self):
+  s=(ROOT/'archive.html').read_text()
+  self.assertIn('Tracker Archive',s)
+  self.assertNotIn('Years of listening.',s)
+  self.assertNotIn('archive-totals',s)
 if __name__=='__main__':unittest.main()

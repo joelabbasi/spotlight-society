@@ -19,3 +19,7 @@ Added layered globe parallax, floating platform cards, CSS perspective on track 
 ## Complete archive update
 
 Six automated checks pass, including exact archive content counts and exclusion of long copied excerpts from public indexes. Browser: category filtering works; Show all exposes all 62 news records; impossible search shows empty state; publication search for “polio” finds two records; source search finds matching references; archived video click creates the correct titled iframe. At 390px, archive and approach pages have no horizontal overflow. Homepage Archive link resolves to `archive.html`; five independently sourced homepage timeline entries remain linked. Third-party article/link availability and playback of every historical video are not guaranteed. Screenshot: archive-desktop.jpg.
+
+## November 14 client review, applied November 15
+
+Nine automated checks pass. Added checks for exact current figures, the single homepage About paragraph, five requested team names, removed former team members/sections, simplified archive hero, and 50 local gallery photo links. JavaScript syntax checked for homepage, donation, archive and gallery scripts. Browser checks: official GAM logo and portraits load; desktop and 390px mobile pages have no horizontal overflow; gallery expands from 12 to 24 images, opens local files, advances photos and closes; impact reads 369 / 79 / One / infinity; archive totals are removed. Desktop screenshots: client-review-home.jpg and client-review-team.jpg. Jeni's bio and final photo approval remain client dependencies.
