@@ -2,7 +2,7 @@
 
 - Supplied transparent GAM logo copied unchanged into assets/gam-logo.png.
 - Tracks, 17 SDGs and other approved homepage sections retained.
-- Featured replacement photos were not attached; current photos remain pending those files. Bios/profiles pending client delivery.
+- The client subsequently supplied facing-1-.jpg, facing-2-.jpg and facing-3-.jpg through three Drive links. These now replace the two homepage carousel images, in the supplied order. Source IDs retained in featured-media.json; display derivatives capped at 1920 pixels. Bios/profiles pending client delivery.
 - Gallery contains all 156 images from the seven event folders in the supplied Drive gallery. Source IDs and original filenames retained in gallery-media.json. Two Damascus videos linked to original Drive files. Logos folder excluded from event photos.
 - Dashboard public API: https://dashboard-endpoint.onrender.com/api/projects. Counts match dashboard MapView: projects keyed by postId; country names from locations, falling back to country fields in row; case-insensitive deduplication. Verified 346 projects, 79 countries on November 16. This supersedes the former fixed 369 project figure.
 - API does not allow the hosted site's browser origin. An hourly GitHub Action on main writes aggregate-only stats.json to gh-pages; the homepage checks its same-origin snapshot on load, every 15 minutes and on return to the tab. GitHub schedules may be delayed. Snapshots older than 3 hours are labeled delayed. Failed refreshes preserve last good figures.
