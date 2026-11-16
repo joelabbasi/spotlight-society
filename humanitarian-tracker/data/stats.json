@@ -1,0 +1,7 @@
+{
+  "projects": 346,
+  "countries": 79,
+  "updated_at": "2026-11-16T18:52:22+00:00",
+  "source": "https://gam-dashboard.github.io/dashboard/#/",
+  "feed": "https://dashboard-endpoint.onrender.com/api/projects"
+}
