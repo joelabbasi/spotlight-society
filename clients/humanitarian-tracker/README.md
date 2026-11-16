@@ -34,3 +34,7 @@ Regenerate archive markup and indexes with `python3 scripts/build_archive.py`. I
 ## November client review
 
 Homepage now uses the supplied GAM wordmark, updated tagline and impact figures, one approved About paragraph, the five requested team profiles and revised Commit to Data video copy. `gallery.html` hosts 50 local event photos with progressive loading and a keyboard-accessible viewer. Run `python3 scripts/build_gallery.py` to regenerate its static markup from `dist/data/gallery.json`. The earlier `about.html` route redirects to the homepage About section. See `references/CLIENT-REVIEW-2026-11-14.md` for decisions and remaining client materials.
+
+## November 16 client review
+
+Gallery: 156 locally hosted images across seven event albums, with two original Drive film links. Source manifest: references/gallery-media.json. Rebuild gallery with `python3 scripts/build_gallery.py`. Dashboard aggregate snapshot: dist/data/stats.json; refresh locally using `python3 scripts/refresh_stats.py`. The hourly refresh workflow lives on repository main and updates gh-pages. Replacement featured photos and client bios remain pending.

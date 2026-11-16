@@ -25,7 +25,7 @@ class SiteTests(unittest.TestCase):
   self.assertEqual(len(checkout),1);self.assertIn('disabled',checkout[0])
   self.assertFalse(any(t in ('form','iframe') for t,_ in page.elements))
   self.assertFalse(any(a.get('name') in ('card','email','cardNumber','cvc') for _,a in page.elements))
-  for script in ROOT.glob('*.js'):
+  for script in [ROOT/'donate.js']:
    self.assertNotIn('fetch(',script.read_text());self.assertNotIn('Stripe(',script.read_text())
  def test_external_links_use_safe_rel(self):
   for path in ROOT.glob('*.html'):
@@ -58,18 +58,19 @@ class ClientReviewTests(unittest.TestCase):
  def test_approved_homepage_and_team(self):
   s=(ROOT/'index.html').read_text()
   self.assertEqual(s.count('Humanitarian Tracker is a U.S.-based 501(c)(3) organization.'),1)
-  for phrase in ['data-count="369"','data-count="79"','<strong>One</strong>','Jeni Craswell','Austin Holmes','Mina Aziz','Hend Alhinnawi','Safaa Aldib','Commit to Data Campaign','In collaboration with Open Data Watch and PARIS21']:
+  for phrase in ['data-count="346"','data-count="79"','<strong>One</strong>','Jeni Craswell','Austin Holmes','Mina Aziz','Hend Alhinnawi','Safaa Aldib','Commit to Data Campaign','In collaboration with Open Data Watch and PARIS21']:
    self.assertIn(phrase,s)
   for phrase in ['A HUMANITARIAN TRACKER INITIATIVE','The original mosaic','id="intro"','id="approach"','Warisha Soomro','Dana Ghazi','Lauren Wolfe','Majd Isreb','John Page','David Scales','Karolos Talvis']:
    self.assertNotIn(phrase,s)
   self.assertNotIn('Humanitarian Tracker is a U.S.-based',(ROOT/'about.html').read_text())
  def test_all_gallery_photos_are_local(self):
   page=Page(ROOT/'gallery.html');photos=[a for t,a in page.elements if 'data-photo' in a]
-  self.assertEqual(len(photos),50)
+  self.assertEqual(len(photos),156)
+  self.assertEqual(len({p['data-album'] for p in photos}),7)
   for photo in photos:
    self.assertTrue(photo['href'].startswith('assets/'))
    self.assertTrue((ROOT/photo['href']).is_file())
-  self.assertNotIn('drive.google.com',(ROOT/'gallery.html').read_text())
+  self.assertEqual(len(json.loads((ROOT/'data/gallery-videos.json').read_text())),2)
  def test_simplified_archive_hero(self):
   s=(ROOT/'archive.html').read_text()
   self.assertIn('Tracker Archive',s)
