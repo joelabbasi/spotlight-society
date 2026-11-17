@@ -41,3 +41,7 @@ Kept only the two hero globe platform cards as selectors. They scroll to the emb
 ## Stripe checkout activation
 
 User supplied live Stripe Payment Link https://buy.stripe.com/4gM9AV2QH8GO8f3eoFfMA01. Verified merchant heading Humanitarian Tracker and product Join the Mosaic; live USD checkout. Donation CTA now links directly to it. Amount is entered and confirmed on Stripe, with no local payment fields or unsupported amount-prefill parameters. Monthly giving marked coming soon pending a recurring link. No payment submitted during verification. This supersedes the original disabled-checkout requirement.
+
+## Typography and portrait refinement
+
+Increased section heading and team name sizes. Changed Jeni’s portrait from a full-card image to a compact, uncropped 160px headshot (145px mobile), retaining natural proportions and complete face. Browser verified the revised team card.
