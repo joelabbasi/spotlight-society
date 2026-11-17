@@ -21,3 +21,7 @@ The user subsequently requested “Technology. Crowdsourcing. AI for social good
 ## Hero layout refinement
 
 Moved the social-good tagline beneath the Humanitarian Tracker header branding. Expanded GAM wordmark to the full hero content width (1250px maximum) and placed it above the headline, filling the open blue area. Responsive header and mobile logo sizes retained.
+
+## Logo size and Safa portrait adjustment
+
+Reduced GAM hero logo to 76% width, capped at 900px on desktop; retained full available width on mobile. Replaced Safa’s team portrait with supplied AldibSafa_Headshot.png, copied unchanged.
