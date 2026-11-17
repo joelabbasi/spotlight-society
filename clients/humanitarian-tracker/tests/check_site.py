@@ -19,14 +19,14 @@ class SiteTests(unittest.TestCase):
      if not url or ':' in url:continue
      if url.startswith('#'):self.assertIn(url[1:],ids,f'{path}: {url}')
      else:self.assertTrue((path.parent/url.split('#')[0]).exists(),url)
- def test_checkout_cannot_accept_payments(self):
+ def test_checkout_uses_only_stripe_hosted_payment_link(self):
   page=Page(ROOT/'donate.html')
-  checkout=[a for tag,a in page.elements if tag=='button' and a.get('class')=='checkout']
-  self.assertEqual(len(checkout),1);self.assertIn('disabled',checkout[0])
-  self.assertFalse(any(t in ('form','iframe') for t,_ in page.elements))
-  self.assertFalse(any(a.get('name') in ('card','email','cardNumber','cvc') for _,a in page.elements))
-  for script in [ROOT/'donate.js']:
-   self.assertNotIn('fetch(',script.read_text());self.assertNotIn('Stripe(',script.read_text())
+  checkout=[a for tag,a in page.elements if tag=='a' and a.get('class')=='checkout']
+  self.assertEqual(len(checkout),1)
+  self.assertEqual(checkout[0]['href'],'https://buy.stripe.com/4gM9AV2QH8GO8f3eoFfMA01')
+  self.assertFalse(any(t in ('form','iframe','input') for t,_ in page.elements))
+  self.assertNotIn('fetch(', (ROOT/'donate.js').read_text())
+  self.assertNotIn('Stripe(', (ROOT/'donate.js').read_text())
  def test_external_links_use_safe_rel(self):
   for path in ROOT.glob('*.html'):
    for tag,a in Page(path).elements:

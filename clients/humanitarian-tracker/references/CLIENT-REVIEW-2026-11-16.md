@@ -37,3 +37,7 @@ Correction: restored All events as the default view at the user’s request. Chr
 ## Simplified map and dashboard navigation
 
 Kept only the two hero globe platform cards as selectors. They scroll to the embedded view and select map or dashboard in-place. Removed persistent platform dock, duplicate hero CTAs, lower platform switch/load buttons and placeholder copy. Map is embedded by default with lazy loading; direct external fallback remains. Moved motion pause control into footer. Both cards remain available on mobile. Browser-checked both iframe targets and mobile overflow; no JS errors.
+
+## Stripe checkout activation
+
+User supplied live Stripe Payment Link https://buy.stripe.com/4gM9AV2QH8GO8f3eoFfMA01. Verified merchant heading Humanitarian Tracker and product Join the Mosaic; live USD checkout. Donation CTA now links directly to it. Amount is entered and confirmed on Stripe, with no local payment fields or unsupported amount-prefill parameters. Monthly giving marked coming soon pending a recurring link. No payment submitted during verification. This supersedes the original disabled-checkout requirement.
