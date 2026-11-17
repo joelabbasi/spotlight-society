@@ -57,7 +57,7 @@ class ArchiveTests(unittest.TestCase):
 class ClientReviewTests(unittest.TestCase):
  def test_approved_homepage_and_team(self):
   s=(ROOT/'index.html').read_text()
-  self.assertEqual(s.count('Humanitarian Tracker empowers citizens to turn local knowledge into lasting impact. We use crowdsourcing and AI across humanitarian reporting, global health, education, and sustainable development. Our AI-enhanced platform, Global Action Mosaic, helps community-led initiatives gain visibility, share knowledge, and connect with impact projects worldwide. We are a U.S.-based 501(c)(3) nonprofit in consultative status with the UN Economic and Social Council, with no political or religious affiliation.'),1)
+  self.assertEqual(s.count('Humanitarian Tracker empowers citizens through innovation in technology, crowdsourcing, and AI for social good. Our AI-enhanced platform, Global Action Mosaic, helps community-led initiatives gain visibility, share knowledge, and connect with impact projects worldwide. We are a U.S.-based 501(c)(3) organization in consultative status with the UN Economic and Social Council, with no political or religious affiliation.'),1)
   for phrase in ['data-count="346"','data-count="79"','<strong>One</strong>','Jeni Craswell','Austin Holmes','Mina Aziz','Hend Alhinnawi','Safaa Aldib','Commit to Data Campaign','In collaboration with Open Data Watch and PARIS21']:
    self.assertIn(phrase,s)
   for phrase in ['A HUMANITARIAN TRACKER INITIATIVE','The original mosaic','id="intro"','id="approach"','Warisha Soomro','Dana Ghazi','Lauren Wolfe','Majd Isreb','John Page','David Scales','Karolos Talvis']:
