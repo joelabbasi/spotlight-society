@@ -17,3 +17,7 @@ Replaced homepage About description verbatim with Safa’s revised paragraph, in
 Applied Safa’s final About paragraph verbatim (lasting impact; connect with impact projects worldwide). Added Jeni’s supplied bio, M.A. credential, senior advisor role, and portrait embedded in Jeni Craswell Bio.docx. Increased the GAM logo from 420px to 600px on desktop, with larger responsive sizes. Removed the duplicate project attribution line below the logo at the user’s request.
 
 The user subsequently requested “Technology. Crowdsourcing. AI for social good.” as the line beneath the larger GAM logo, replacing the former repeated project attribution.
+
+## Hero layout refinement
+
+Moved the social-good tagline beneath the Humanitarian Tracker header branding. Expanded GAM wordmark to the full hero content width (1250px maximum) and placed it above the headline, filling the open blue area. Responsive header and mobile logo sizes retained.
