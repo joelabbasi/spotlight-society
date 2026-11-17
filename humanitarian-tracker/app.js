@@ -49,3 +49,6 @@ document.querySelector('.gallery-prev').addEventListener('click',()=>moveGallery
 
 const impactStats=document.querySelector('.impact-stats');
 if(impactStats&&'IntersectionObserver' in window){const impactObserver=new IntersectionObserver(entries=>{if(!entries.some(e=>e.isIntersecting))return;impactObserver.disconnect();if(!motionAllowed())return;const counters=[...impactStats.querySelectorAll('[data-count]')],start=performance.now();function countFrame(now){const progress=Math.min((now-start)/1400,1),ease=1-Math.pow(1-progress,3);counters.forEach(el=>{el.textContent=String(Math.round(Number(el.dataset.count)*ease))});if(progress<1&&motionAllowed())requestAnimationFrame(countFrame);else counters.forEach(el=>el.textContent=el.dataset.count)}requestAnimationFrame(countFrame)},{threshold:.3});impactObserver.observe(impactStats)}
+
+// Each logo strip can be paused independently.
+document.querySelectorAll('[data-logo-toggle]').forEach(button=>button.addEventListener('click',()=>{const strip=button.closest('.logo-carousel'),paused=strip.classList.toggle('is-paused');button.setAttribute('aria-pressed',String(paused));button.textContent=paused?'Resume':'Pause';button.setAttribute('aria-label',`${paused?'Resume':'Pause'} ${strip.id} logos`)}));
