@@ -1,8 +1,12 @@
 'use strict';
-const photos=[...document.querySelectorAll('[data-photo]')],more=document.querySelector('#more-photos'),filters=[...document.querySelectorAll('[data-album-filter]')];let visibleCount=12,album='all';
-const matching=()=>photos.filter(p=>album==='all'||p.dataset.album===album);
-function showPhotos(){const matches=matching();photos.forEach(p=>p.hidden=true);matches.slice(0,visibleCount).forEach(p=>p.hidden=false);more.hidden=visibleCount>=matches.length;document.querySelector('#photo-count').textContent=`${matches.length} photos${album==='all'?' across seven events':''}`}
-filters.forEach(button=>button.addEventListener('click',()=>{album=button.dataset.albumFilter;visibleCount=12;filters.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));showPhotos()}));
+const photos=[...document.querySelectorAll('[data-photo]')],more=document.querySelector('#more-photos'),filters=[...document.querySelectorAll('[data-album-filter]')];let visibleCount=12,album=filters[0].dataset.albumFilter;
+const films=document.querySelector('#damascus-films'),damascus='1yL_oA7KwDAFUtACDj2sHM4ZYJvMONCbF';
+const matching=()=>photos.filter(p=>p.dataset.album===album);
+function showPhotos(){const matches=matching();photos.forEach(p=>p.hidden=true);matches.slice(0,visibleCount).forEach(p=>p.hidden=false);more.hidden=visibleCount>=matches.length;document.querySelector('#photo-count').textContent=`${matches.length} photos`;films.hidden=album!==damascus;document.querySelector('#album-title').textContent=filters.find(b=>b.dataset.albumFilter===album).textContent}
+function selectAlbum(id){album=filters.some(b=>b.dataset.albumFilter===id)?id:filters[0].dataset.albumFilter;visibleCount=12;filters.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.albumFilter===album)));showPhotos()}
+filters.forEach(button=>button.addEventListener('click',()=>{selectAlbum(button.dataset.albumFilter);history.replaceState(null,'','#'+album)}));
+window.addEventListener('hashchange',()=>selectAlbum(location.hash.slice(1)));
+selectAlbum(location.hash.slice(1));
 more.addEventListener('click',()=>{const firstNew=matching()[visibleCount];visibleCount+=12;showPhotos();firstNew?.focus()});showPhotos();
 const viewer=document.querySelector('#photo-viewer'),image=document.querySelector('#viewer-image'),caption=document.querySelector('#viewer-caption');let selected=0,opener;
 function displayPhoto(index){const matches=matching();selected=(index+matches.length)%matches.length;const photo=matches[selected],img=photo.querySelector('img');image.src=photo.href;image.alt=img.alt;caption.textContent=img.alt;document.querySelector('#open-photo').href=photo.href}

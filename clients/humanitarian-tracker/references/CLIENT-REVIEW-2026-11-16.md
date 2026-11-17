@@ -25,3 +25,9 @@ Moved the social-good tagline beneath the Humanitarian Tracker header branding. 
 ## Logo size and Safa portrait adjustment
 
 Reduced GAM hero logo to 76% width, capped at 900px on desktop; retained full available width on mobile. Replaced Safa’s team portrait with supplied AldibSafa_Headshot.png, copied unchanged.
+
+Adjusted Jeni’s portrait to retain the full original framing and natural aspect ratio, replacing the fixed-height crop that cut off the image.
+
+## Gallery organization
+
+Removed All events. Albums display only their own photos; ordered earliest to latest using supplied numbered source folders (CSW69, Climate Forum, UNOC, Damascus, UNGA80, WSS, GlobalWA). No exact dates invented for Climate Forum or November events. Damascus films are visible only in its selected category, before its photos. Album selections have shareable URL fragments.
