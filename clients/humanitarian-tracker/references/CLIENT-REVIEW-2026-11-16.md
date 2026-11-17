@@ -15,3 +15,5 @@ Replaced homepage About description verbatim with Safa’s revised paragraph, in
 ## Final description and Jeni bio
 
 Applied Safa’s final About paragraph verbatim (lasting impact; connect with impact projects worldwide). Added Jeni’s supplied bio, M.A. credential, senior advisor role, and portrait embedded in Jeni Craswell Bio.docx. Increased the GAM logo from 420px to 600px on desktop, with larger responsive sizes. Removed the duplicate project attribution line below the logo at the user’s request.
+
+The user subsequently requested “Technology. Crowdsourcing. AI for social good.” as the line beneath the larger GAM logo, replacing the former repeated project attribution.
