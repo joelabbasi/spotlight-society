@@ -40,3 +40,7 @@ footer{padding-bottom:45px}footer #motion-toggle{border:1px solid #819ba6;backgr
 h2{font-size:clamp(48px,5.4vw,80px)}.impact h2{font-size:clamp(50px,6.4vw,94px)}.team-copy h3{font-size:28px}.donation-card h2{font-size:46px}.giving-purpose h2{font-size:clamp(48px,5.4vw,80px)}.film-heading h3{font-size:clamp(42px,4.4vw,64px)}
 .team-card:nth-child(3)>img{width:160px;max-width:calc(100% - 52px);height:auto;aspect-ratio:auto;object-fit:contain;margin:26px 26px 0;border-radius:8px;background:transparent}
 @media(max-width:760px){h2{font-size:48px}.impact h2{font-size:48px}.team-copy h3{font-size:26px}.donation-card h2{font-size:43px}.giving-purpose h2{font-size:48px}.film-heading h3{font-size:42px}.team-card:nth-child(3)>img{width:145px}}
+/* Larger primary navigation labels. */
+.header nav{font-size:16px;gap:22px}
+@media(min-width:761px) and (max-width:1200px){.header:has(.header-identity){flex-wrap:wrap;justify-content:center;padding-top:18px;padding-bottom:18px}.header-identity{margin-right:auto}.header nav{font-size:15px;gap:20px;flex-wrap:wrap;justify-content:center}.header:has(.header-identity) nav{flex-basis:100%}}
+@media(max-width:760px){.header nav{gap:0;font-size:18px}.header nav a{font-size:18px}}
