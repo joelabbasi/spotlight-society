@@ -33,3 +33,7 @@ Adjusted Jeni’s portrait to retain the full original framing and natural aspec
 Removed All events. Albums display only their own photos; ordered earliest to latest using supplied numbered source folders (CSW69, Climate Forum, UNOC, Damascus, UNGA80, WSS, GlobalWA). No exact dates invented for Climate Forum or November events. Damascus films are visible only in its selected category, before its photos. Album selections have shareable URL fragments.
 
 Correction: restored All events as the default view at the user’s request. Chronological album ordering and Damascus-only films above photos retained.
+
+## Simplified map and dashboard navigation
+
+Kept only the two hero globe platform cards as selectors. They scroll to the embedded view and select map or dashboard in-place. Removed persistent platform dock, duplicate hero CTAs, lower platform switch/load buttons and placeholder copy. Map is embedded by default with lazy loading; direct external fallback remains. Moved motion pause control into footer. Both cards remain available on mobile. Browser-checked both iframe targets and mobile overflow; no JS errors.
