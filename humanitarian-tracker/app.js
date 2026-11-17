@@ -13,6 +13,7 @@ let selectedPlatform='map',loadVersion=0,embedTimer;
 const embed=document.querySelector('#embed-container'),status=document.querySelector('#embed-status');
 function openPlatform(key){
  const p=platforms[key];if(!p)return;
+ document.querySelectorAll('.platform-switch [data-platform]').forEach(button=>{const active=button.dataset.platform===key;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active))});
  if(key!==selectedPlatform||!embed.querySelector('iframe')){
   selectedPlatform=key;const version=++loadVersion;clearTimeout(embedTimer);
   const frame=document.createElement('iframe');frame.title=`Global Action Mosaic ${p.name}`;frame.referrerPolicy='no-referrer';frame.src=p.url;frame.setAttribute('allowfullscreen','');embed.replaceChildren(frame);
