@@ -81,7 +81,7 @@
     "alt": "Permanent Mission of Monaco to the United Nations",
     "id": "1bLMCgToAr86Bz9VR4GAxvjFHo3fQORec",
     "title": "MonacoMission2theUN.jpg",
-    "key": "citations"
+    "key": "partners"
   },
   {
     "local": "citations-13.webp",
@@ -194,5 +194,19 @@
     "id": "1HZ9D3U-Gj_eZNEB5PCCWZJhgO3eDRVU5",
     "title": "FPCD.png",
     "key": "partners"
+  },
+  {
+    "local": "partner-deaf-roots.png",
+    "alt": "Deaf Roots",
+    "key": "partners",
+    "email_id": "1a1ebcc9ccacffab",
+    "original_name": "DeafRoots.png"
+  },
+  {
+    "local": "partner-united-voices-4peace.png",
+    "alt": "United Voices 4 Peace",
+    "key": "partners",
+    "email_id": "1a1ebd78690096b7",
+    "original_name": "UV4Peace.png"
   }
 ]
