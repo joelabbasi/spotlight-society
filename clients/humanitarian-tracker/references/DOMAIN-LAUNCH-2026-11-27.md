@@ -13,3 +13,5 @@ Production includes 21 legacy URL redirects, a helpful 404, sitemap, robots.txt,
 Rollback: restore apex A 185.230.63.171, 185.230.63.186, 185.230.63.107 and www CNAME cdn3.wixdns.net. No email changes are needed.
 
 Primary address configured as https://humanitariantracker.org/; www is the alias. HTTPS enforcement enabled. Certificate for the apex approved; www certificate and resolver propagation verification remain in progress at this checkpoint. Production first hourly-statistics workflow completed successfully. Verified all 210 assets and the primary pages over HTTP, plus a certificate-validated HTTPS request directly to GitHub Pages for the apex.
+
+Nine original project and analysis URLs now preserve the reviewed historical text and original references instead of redirecting back to the archive. Where the audited source preserved matching inline “here” anchors, those original hyperlinks are restored in order. All site checks pass; representative project layout visually verified.
