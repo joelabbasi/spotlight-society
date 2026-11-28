@@ -1,0 +1,12 @@
+{
+  "name": "humanitarian-tracker-gam",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated buildless client website for Humanitarian Tracker",
+  "scripts": {
+    "build": "bash scripts/build-edge.sh",
+    "test": "node --test tests/edge.test.mjs",
+    "validate": "node scripts/validate-edge.mjs"
+  },
+  "type": "module"
+}

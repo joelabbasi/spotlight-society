@@ -38,3 +38,7 @@ Homepage now uses the supplied GAM wordmark, updated tagline and impact figures,
 ## November 16 client review
 
 Gallery: 156 locally hosted images across seven event albums, with two original Drive film links. Source manifest: references/gallery-media.json. Rebuild gallery with `python3 scripts/build_gallery.py`. Dashboard aggregate snapshot: dist/data/stats.json; refresh locally using `python3 scripts/refresh_stats.py`. The hourly refresh workflow lives on repository main and updates gh-pages. Replacement featured photos and client bios remain pending.
+
+## HTTPS edge hosting (November 27)
+
+The native Sites hosting manifest now lives under `hosting-edge/.openai/hosting.json`; its project identity is preserved. That isolated Worker serves the existing public GitHub Pages frontend. Do not deploy `dist/` as a static version to the bound Sites project, because doing so would replace the HTTPS redirect Worker. Public GitHub Pages publishing and the hourly data refresh remain independent. Domain validation is still pending; see the launch notes before changing DNS.
