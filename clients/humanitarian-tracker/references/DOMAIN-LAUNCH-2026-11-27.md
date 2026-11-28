@@ -11,3 +11,5 @@ Before snapshot: domain-dns-before-2026-11-27.json. Wix UI full record snapshot 
 Production includes 21 legacy URL redirects, a helpful 404, sitemap, robots.txt, and its own hourly aggregate statistics refresh workflow. Source remains maintained in this client directory; sync dist to production root while preserving CNAME, redirects, workflow, scripts, and launch metadata. Never overwrite a newer production stats.json with an older source snapshot.
 
 Rollback: restore apex A 185.230.63.171, 185.230.63.186, 185.230.63.107 and www CNAME cdn3.wixdns.net. No email changes are needed.
+
+Primary address configured as https://humanitariantracker.org/; www is the alias. HTTPS enforcement enabled. Certificate for the apex approved; www certificate and resolver propagation verification remain in progress at this checkpoint. Production first hourly-statistics workflow completed successfully. Verified all 210 assets and the primary pages over HTTP, plus a certificate-validated HTTPS request directly to GitHub Pages for the apex.
