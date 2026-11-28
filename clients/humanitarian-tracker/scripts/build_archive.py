@@ -5,7 +5,7 @@ from urllib.parse import urlsplit,parse_qs
 ROOT=Path(__file__).resolve().parents[1];R=ROOT/'references/archive-input';D=ROOT/'dist'
 def read(n):return json.loads((R/n).read_text())
 def esc(x):return html.escape(str(x or ''),quote=True)
-def link(url,label,cls=''):return f'<a class="{cls}" href="{esc(url)}" target="_blank" rel="noopener noreferrer">{esc(label)} <span aria-hidden="true">↗</span></a>'
+def link(url,label,cls=''):return f'<a class="{cls}" href="{esc(url.replace("https://www.humanitariantracker.org", "https://humanitariantracker.org").replace("http://www.humanitariantracker.org", "https://humanitariantracker.org"))}" target="_blank" rel="noopener noreferrer">{esc(label)} <span aria-hidden="true">↗</span></a>'
 def domain(u):return urlsplit(u or '').netloc.removeprefix('www.')
 def year(s):
  m=re.search(r'\b(?:19|20)\d{2}\b',s or '');return m[0] if m else ''
